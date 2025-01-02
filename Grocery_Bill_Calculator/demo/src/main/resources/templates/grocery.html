@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Grocery Bill Calculator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-image: url('/back.jpg'); /* Update this path based on your file location */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+        /* Centered container for content */
+        .container {
+            background-color: rgba(0, 0, 0, 0.219); /* Semi-transparent black */
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Form and input styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input, button {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+        }
+
+        input {
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        button {
+            background-color: orange;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: darkorange;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: darkorange;
+            color: white;
+        }
+
+        td {
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Grocery Bill Calculator</h1>
+        
+        <!-- Add/Edit Form -->
+        <form th:action="@{/add}" th:object="${item}" method="post">
+            <input type="hidden" th:field="*{id}">
+            <input type="text" th:field="*{itemName}" placeholder="Item Name" required>
+            <input type="number" th:field="*{quantity}" placeholder="Quantity" required>
+            <input type="number" th:field="*{amount}" step="0.01" placeholder="Amount" required>
+            <button type="submit">Save</button>
+        </form>
+
+        <!-- Item Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                    <th>Total Cost</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${items}">
+                    <td th:text="${item.id}"></td>
+                    <td th:text="${item.itemName}"></td>
+                    <td th:text="${item.quantity}"></td>
+                    <td th:text="${item.amount}"></td>
+                    <td th:text="${item.quantity * item.amount}"></td>
+                    <td>
+                        <a th:href="@{/edit/{id}(id=${item.id})}" style="color: orange; text-decoration: none;">Edit</a>
+                        |
+                        <a th:href="@{/delete/{id}(id=${item.id})}" style="color: red; text-decoration: none;">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
